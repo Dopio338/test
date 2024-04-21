@@ -66,3 +66,71 @@ bullets = sprite.Group()
 monsters = sprite.Group()
 asteroids = sprite.Group()
 for i in range(5):
+    monster = Enemy('enemy2.png', randint(2,8), randint(0, 500), -100)
+    monsters.add(monster) 
+    asteroid = Enemy('asteroid.png', randint(1,5), randint(1,5), -100)
+    asteroids.add(asteroid)
+
+
+player = Player('rocket2.png', 5, 350, 350)
+
+y1 = 0
+y2 = -500
+game = True
+kills = 0
+finish = False
+
+while game:
+    collides = sprite.groupcollide(monsters, bullets, True, True)
+    for i in collides:
+        kills += 1
+        monster = Enemy('enemy2.png', randint(2,8), randint(0, 500), -100)
+        monsters.add(monster) 
+        text_win = font2.render('YOU WIN:' , True, (255, 255, 255))
+ 
+        
+    
+        
+
+    window.blit(background, (0,y1))
+    window.blit(background, (0,y2))
+    text_loose = font1.render(
+    'Пропущено:' + str(lost), True, (255, 255, 255)
+    
+)
+    text_kills = font1.render(
+    'Счёт:' + str(kills), True, (255, 255, 255)
+    
+)
+    text_win = font1.render(
+    'YOU WIN!', True, (255, 255, 255)
+    
+)
+    window.blit(text_kills,(10,40))
+    window.blit(text_loose,(10,10))  
+    y1 += 5
+    y2 += 5
+    if y1 >= 500:
+        y1 = -500
+    if y2 >= 500:
+        y2 = -500
+    for e in event.get():
+        if e.type == QUIT:
+            game = False
+        if e.type == KEYDOWN:
+            if e.key == K_SPACE:
+                player.fire()
+    if finish != True:
+        if kills >= 10:
+            window.blit(text_win,(10,10))
+            finish = True
+        player.reset()
+        player.update()
+        monsters.draw(window)
+        monsters.update()  
+        bullets.update()
+        bullets.draw(window)
+        asteroids.draw(window)
+        asteroids.update()    
+        clock.tick(60)
+        display.update()
